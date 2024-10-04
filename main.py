@@ -3,9 +3,9 @@ from os import system, path
 from time import sleep
 from string import ascii_lowercase
 
-letters4 = list(ascii_lowercase)
+letters4 = list(ascii_lowercase)                                                # List of lowercase letters for indexing
 
-men = [
+men = [                                                                         # List of file paths for dancing men images corresponding to each letter
     "dancing_men_images/A.png", 
     "dancing_men_images/B.png", 
     "dancing_men_images/C.png", 
@@ -34,7 +34,7 @@ men = [
     "dancing_men_images/Z.png"
 ]
 
-flag_men = [
+flag_men = [                                                                    # List of file paths for flag images (used for the last letter in a word)
     "flag_images/flag_a.png",     
     "flag_images/flag_b.png", 
     "flag_images/flag_c.png", 
@@ -63,7 +63,7 @@ flag_men = [
     "flag_images/flag_z.png"
 ]
 
-d = '0'
+d = '0'                                                                         # Main loop for program options
 while (d != '1') or (d != '2'):
     system("cls")
     print("################################")
@@ -72,35 +72,43 @@ while (d != '1') or (d != '2'):
     print("# Options: \n")
     print("1] Encode")
     print("2] Exit\n")
-    d = input("Choose option: ")
-    if d == '1':
+
+    d = input("Choose option: ")                                                # User input for selecting the option
+    if d == '1':                                                                # Option to encode a message
         sleep(0.5)
-        msgw = list(input("Enter message: ").split())
+        msgw = list(input("Enter message: ").split())                           # Input message to encode, split into words
         dancing_men_images = []
         count = 0
-        for i in range(len(msgw)):
-            for j in msgw[i]:
-                if j == msgw[i][-1]:
-                    flag_image = Image.open(flag_men[letters4.index(j)])
-                    dancing_men_images.append(flag_image.resize((36, 54)))
+        for i in range(len(msgw)):                                              # Loop through each word in the message
+            for j in msgw[i]:                                                   # Loop through each letter in the word
+                if j == msgw[i][-1]:                                            # Check if it's the last letter of the word
+                    flag_image = Image.open(flag_men[letters4.index(j)])        # Flag image for last letter
+                    dancing_men_images.append(flag_image.resize((36, 54)))      # Resize and append image
                 else:
-                    man_image = Image.open(men[letters4.index(j)])
-                    dancing_men_images.append(man_image.resize((36, 54)))
+                    man_image = Image.open(men[letters4.index(j)])              # Regular image for non-final letters
+                    dancing_men_images.append(man_image.resize((36, 54)))       # Resize and append image
                 count += 1
-        total_width = 36 * count
-        concatImage = Image.new('RGBA', (total_width, 54), (255, 255, 255, 0))
+
+                                                                                # Create a new image for the entire encoded message
+        total_width = 36 * count                                                # Calculate total width based on the number of images
+        concatImage = Image.new('RGBA', (total_width, 54), (255, 255, 255, 0))  # Transparent background
         x_offset = 0
-        for image in dancing_men_images:
-            concatImage.paste(image, (x_offset, 0))
-            x_offset += 36
+
+        for image in dancing_men_images:                                        # Concatenate all the images horizontally
+            concatImage.paste(image, (x_offset, 0))                             # Paste image at the current offset
+            x_offset += 36                                                      # Update offset for next image
+
         sleep(0.5)
-        concatImage.save("encoded_message.png")
-        concatImage.show()
-        path = path.abspath("encoded_message.png")
+        concatImage.save("encoded_message.png")                                 # Save the encoded image
+        concatImage.show()                                                      # Display the image
+
+        path = path.abspath("encoded_message.png")                              # Display the path where the image is saved
         print(f'\nThe enocded message has been saved to {path}\n')
-        input('Press "Enter to continue... ')
-        d = '0'
-    elif d == '2':
-        print("Thanks for using this program :)")
+
+        input('Press "Enter to continue... ')                                   # Wait for user to press Enter
+        d = '0'                                                                 # Reset option to continue
+
+    elif d == '2':                                                              # Option to exit
+        print("Thanks for using this program :)")                               # Exit the program
         sleep(1)
         exit()
